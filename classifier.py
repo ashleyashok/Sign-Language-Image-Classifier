@@ -9,21 +9,18 @@ import tensorflow as tf
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from os import getcwd
+import matplotlib.pyplot as plt
 
 def get_data(filename):
     df = pd.read_csv(filename)
-	label = df.iloc[:,0].values
-	images = df.iloc[:, 1:].values
+    labels = df.iloc[:,0].values
+    df_image = df.iloc[:, 1:].values
+    images = df_image.reshape(len(df_image), 28, 28)
+    
+    return images, labels
 
-
-
-
-	return images, labels
-
-print(sys.executable)
-
-path_sign_mnist_train = f"{getcwd()}/../Data/sign_mnist_train.csv"
-path_sign_mnist_test = f"{getcwd()}/../Data/sign_mnist_test.csv"
+path_sign_mnist_train = f"{getcwd()}/Data/sign_mnist_train.csv"
+path_sign_mnist_test = f"{getcwd()}/Data/sign_mnist_test.csv"
 
 
 training_images, training_labels = get_data(path_sign_mnist_train)
@@ -82,7 +79,6 @@ history = model.fit_generator(train_generator,
 
 model.evaluate(testing_images, testing_labels, verbose=0)
 
-import matplotlib.pyplot as plt
 acc = history.history['accuracy']
 val_acc =  history.history['val_accuracy']
 loss =  history.history['loss']
@@ -102,3 +98,4 @@ plt.title('Training and validation loss')
 plt.legend()
 
 plt.show()
+
